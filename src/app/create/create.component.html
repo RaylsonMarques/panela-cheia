@@ -1,0 +1,56 @@
+<main class="container pt-5">
+	<h1 class="display-4">Cadastro de nova comanda</h1>
+	<form [formGroup]="form" (submit)="submit()">
+
+		<section class="row">
+			<div class="col-12 col-md-6 col-lg-4">
+				<mat-form-field class="form-field w-100" appearance="outline">
+					<mat-label>Número da comanda</mat-label>
+					<input matInput formControlName="commandNumber" [value]="form.get('commandNumber').value" [maxlength]="4" />
+				</mat-form-field>
+			</div>
+
+			<div class="col-12 col-md-6 col-lg-4">
+				<mat-form-field class="form-field w-100" appearance="outline">
+					<mat-label>Tipo de comanda</mat-label>
+					<mat-select formControlName="type">
+						<mat-option value="refeicao">Comanda de refeição</mat-option>
+						<mat-option value="marmita">Comanda de marmita</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+
+			<div class="col-12 col-md-6 col-lg-4">
+				<mat-form-field class="form-field w-100" appearance="outline">
+					<mat-label>Método de pagamento</mat-label>
+					<mat-select formControlName="paymentMethod">
+						<mat-option value="debito">Débito</mat-option>
+						<mat-option value="credito">Crédito</mat-option>
+						<mat-option value="pix">Pix</mat-option>
+						<mat-option value="dinheiro">Dinheiro</mat-option>
+						<mat-option value="beneficio">Benefício</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+
+			<div class="col-12 col-md-6">
+				<mat-form-field floatLabel="always" class="form-field w-100" appearance="outline">
+					<mat-label>Valor</mat-label>
+					<input matInput formControlName="amount" type="number" class="example-right-align" placeholder="0">
+				</mat-form-field>
+			</div>
+
+			<div class="col-12 col-md-6">
+				<mat-form-field floatLabel="always" class="form-field w-100" appearance="outline">
+					<mat-label>Quantidade</mat-label>
+					<input matInput formControlName="quantity" type="number" class="example-right-align" placeholder="0">
+				</mat-form-field>
+			</div>
+		</section>
+
+		<div class="mt-5 d-flex justify-content-between">
+			<button mat-button type="button" (click)="back()">Voltar</button>
+			<button mat-raised-button color="primary" type="submit">Cadastrar</button>
+		</div>
+	</form>
+</main>

@@ -1,0 +1,343 @@
+<main class="container py-5">
+	<span class="display-4">Resumo</span>
+
+	<div class="my-3 d-flex justify-content-between">
+		<div></div>
+		<button mat-raised-button color="primary" type="button" (click)="redirect()">Cadastrar nova comanda</button>
+	</div>
+
+	<!-- <div class="row"> -->
+		<!-- <div class="col-12 col-lg-8">
+			<h3 class="display-4 mb-1">Débito</h3>
+			<table mat-table [dataSource]="dataSource.debit" class="mat-elevation-z8">
+				<ng-container matColumnDef="no_command">
+					<th mat-header-cell *matHeaderCellDef>Número da comanda</th>
+					<td mat-cell *matCellDef="let element">{{ element.no_command }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="type">
+					<th mat-header-cell *matHeaderCellDef>Tipo</th>
+					<td mat-cell *matCellDef="let element">{{ element.type }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="date">
+					<th mat-header-cell *matHeaderCellDef>Data</th>
+					<td mat-cell *matCellDef="let element">{{ element.date }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="value">
+					<th mat-header-cell *matHeaderCellDef>Valor (R$)</th>
+					<td mat-cell *matCellDef="let element">{{ element.value }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="quantity">
+					<th mat-header-cell *matHeaderCellDef>Quantidade</th>
+					<td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="total">
+					<th mat-header-cell *matHeaderCellDef>Total (R$)</th>
+					<td mat-cell *matCellDef="let element">{{ element.total }}</td>
+				</ng-container>
+
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+			</table>
+
+			<h3 class="display-4 mb-1 mt-5">Crédito</h3>
+			<table mat-table [dataSource]="dataSource.credit" class="mat-elevation-z8">
+				<ng-container matColumnDef="no_command">
+					<th mat-header-cell *matHeaderCellDef>Número da comanda</th>
+					<td mat-cell *matCellDef="let element">{{ element.no_command }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="type">
+					<th mat-header-cell *matHeaderCellDef>Tipo</th>
+					<td mat-cell *matCellDef="let element">{{ element.type }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="date">
+					<th mat-header-cell *matHeaderCellDef>Data</th>
+					<td mat-cell *matCellDef="let element">{{ element.date }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="value">
+					<th mat-header-cell *matHeaderCellDef>Valor (R$)</th>
+					<td mat-cell *matCellDef="let element">{{ element.value }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="quantity">
+					<th mat-header-cell *matHeaderCellDef>Quantidade</th>
+					<td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="total">
+					<th mat-header-cell *matHeaderCellDef>Total (R$)</th>
+					<td mat-cell *matCellDef="let element">{{ element.total }}</td>
+				</ng-container>
+
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+			</table>
+
+			<h3 class="display-4 mb-1 mt-5">Pix</h3>
+			<table mat-table [dataSource]="dataSource.pix" class="mat-elevation-z8">
+				<ng-container matColumnDef="no_command">
+					<th mat-header-cell *matHeaderCellDef>Número da comanda</th>
+					<td mat-cell *matCellDef="let element">{{ element.no_command }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="type">
+					<th mat-header-cell *matHeaderCellDef>Tipo</th>
+					<td mat-cell *matCellDef="let element">{{ element.type }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="date">
+					<th mat-header-cell *matHeaderCellDef>Data</th>
+					<td mat-cell *matCellDef="let element">{{ element.date }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="value">
+					<th mat-header-cell *matHeaderCellDef>Valor (R$)</th>
+					<td mat-cell *matCellDef="let element">{{ element.value }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="quantity">
+					<th mat-header-cell *matHeaderCellDef>Quantidade</th>
+					<td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="total">
+					<th mat-header-cell *matHeaderCellDef>Total (R$)</th>
+					<td mat-cell *matCellDef="let element">{{ element.total }}</td>
+				</ng-container>
+
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+			</table>
+
+			<h3 class="display-4 mb-1 mt-5">Dinheiro</h3>
+			<table mat-table [dataSource]="dataSource.money" class="mat-elevation-z8">
+				<ng-container matColumnDef="no_command">
+					<th mat-header-cell *matHeaderCellDef>Número da comanda</th>
+					<td mat-cell *matCellDef="let element">{{ element.no_command }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="type">
+					<th mat-header-cell *matHeaderCellDef>Tipo</th>
+					<td mat-cell *matCellDef="let element">{{ element.type }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="date">
+					<th mat-header-cell *matHeaderCellDef>Data</th>
+					<td mat-cell *matCellDef="let element">{{ element.date }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="value">
+					<th mat-header-cell *matHeaderCellDef>Valor (R$)</th>
+					<td mat-cell *matCellDef="let element">{{ element.value }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="quantity">
+					<th mat-header-cell *matHeaderCellDef>Quantidade</th>
+					<td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="total">
+					<th mat-header-cell *matHeaderCellDef>Total (R$)</th>
+					<td mat-cell *matCellDef="let element">{{ element.total }}</td>
+				</ng-container>
+
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+			</table>
+
+			<h3 class="display-4 mb-1 mt-5">Benefício - Alimentação/ Refeição</h3>
+			<table mat-table [dataSource]="dataSource.benefit" class="mat-elevation-z8">
+				<ng-container matColumnDef="no_command">
+					<th mat-header-cell *matHeaderCellDef>Número da comanda</th>
+					<td mat-cell *matCellDef="let element">{{ element.no_command }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="type">
+					<th mat-header-cell *matHeaderCellDef>Tipo</th>
+					<td mat-cell *matCellDef="let element">{{ element.type }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="date">
+					<th mat-header-cell *matHeaderCellDef>Data</th>
+					<td mat-cell *matCellDef="let element">{{ element.date }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="value">
+					<th mat-header-cell *matHeaderCellDef>Valor (R$)</th>
+					<td mat-cell *matCellDef="let element">{{ element.value }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="quantity">
+					<th mat-header-cell *matHeaderCellDef>Quantidade</th>
+					<td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+				</ng-container>
+
+				<ng-container matColumnDef="total">
+					<th mat-header-cell *matHeaderCellDef>Total (R$)</th>
+					<td mat-cell *matCellDef="let element">{{ element.total }}</td>
+				</ng-container>
+
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+			</table>
+		</div> -->
+
+		<!-- <div class="col-12 col-lg-4 mt-5"> -->
+			<h3 class="display-4 mb-1">Totais</h3>
+			<div>
+				<h4>Refeições</h4>
+				<div class="d-flex justify-content-between align-items-center border-bottom">
+					<span>Débito</span>
+					<span>{{ formatMoney(sumValue.refeicao.debit) }}</span>
+				</div>
+
+				<div class="d-flex justify-content-between align-items-center border-bottom">
+					<span>Crédito</span>
+					<span>{{ formatMoney(sumValue.refeicao.credit) }}</span>
+				</div>
+
+				<div class="d-flex justify-content-between align-items-center border-bottom">
+					<span>Pix</span>
+					<span>{{ formatMoney(sumValue.refeicao.pix) }}</span>
+				</div>
+
+				<div class="d-flex justify-content-between align-items-center border-bottom">
+					<span>Dinheiro</span>
+					<span>{{ formatMoney(sumValue.refeicao.money) }}</span>
+				</div>
+
+				<div class="d-flex justify-content-between align-items-center">
+					<span>Benefício</span>
+					<span>{{ formatMoney(sumValue.refeicao.benefit) }}</span>
+				</div>
+			</div>
+
+			<hr>
+
+			<div class="my-3">
+				<h4>Marmitas</h4>
+
+				<div class="d-flex justify-content-between align-items-center border-bottom">
+					<span>Débito</span>
+					<span>{{ formatMoney(sumValue.marmita.debit) }}</span>
+				</div>
+
+				<div class="d-flex justify-content-between align-items-center border-bottom">
+					<span>Crédito</span>
+					<span>{{ formatMoney(sumValue.marmita.credit) }}</span>
+				</div>
+
+				<div class="d-flex justify-content-between align-items-center border-bottom">
+					<span>Pix</span>
+					<span>{{ formatMoney(sumValue.marmita.pix) }}</span>
+				</div>
+
+				<div class="d-flex justify-content-between align-items-center border-bottom">
+					<span>Dinheiro</span>
+					<span>{{ formatMoney(sumValue.marmita.money) }}</span>
+				</div>
+
+				<div class="d-flex justify-content-between align-items-center">
+					<span>Benefício</span>
+					<span>{{ formatMoney(sumValue.marmita.benefit) }}</span>
+				</div>
+			</div>
+
+			<div>
+				<h4 class="mb-0">Total de marmitas</h4>
+				<span class="display-6">{{ formatMoney(sumValue.marmitaTotal) }}</span>
+
+				<h4 class="mb-0 mt-2">Total de refeições</h4>
+				<span class="display-6">{{ formatMoney(sumValue.refeicaoTotal) }}</span>
+
+				<h4 class="mb-0 mt-2">Total geral</h4>
+				<span class="display-6">{{ formatMoney(sumValue.generalTotal) }}</span>
+			</div>
+
+
+			<hr>
+
+			<h4 class="mb-0">Controle de comandas do tipo: <b>REFEIÇÃO</b></h4>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.refeicao.numbers" class="col">{{ command }}</div>
+			</div>
+
+
+			<h4 class="mb-0">Controle de comandas do tipo: <b>MARMITA</b></h4>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.marmita.numbers" class="col">{{ command }}</div>
+			</div>
+
+			<h4 class="mb-1">Primeiro número da sequência de comandas do tipo: <b>REFEIÇÃO - <span class="text-success">{{ commands.refeicao.first }}</span></b></h4>
+			<h4 class="mb-3">ùltimo número da sequência de comandas do tipo: <b>REFEIÇÃO - <span class="text-success">{{ commands.refeicao.last }}</span></b></h4>
+
+			<h4 class="mb-1">Primeiro número da sequência de comandas do tipo: <b>MARMITA - <span class="text-success">{{ commands.marmita.first }}</span></b></h4>
+			<h4 class="mb-3">ùltimo número da sequência de comandas do tipo: <b>MARMITA - <span class="text-success">{{ commands.marmita.last }}</span></b></h4>
+
+			<hr>
+
+			<h4 class="mb-0">Comandas faltantes do tipo: <b>REFEIÇÃO</b></h4>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.refeicao.lostCommands" class="col text-danger">{{ command }}</div>
+			</div>
+
+			<h4 class="mb-0">Comandas faltantes do tipo: <b>MARMITAS</b></h4>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.marmita.lostCommands" class="col text-danger">{{ command }}</div>
+			</div>
+
+			<h4 class="mb-0">Comandas agrupadas por forma de pagamento do tipo: <b>REFEIÇÃO</b></h4>
+			<h5 class="mb-0">Comandas vendidas no <b>Crédito à vista</b></h5>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.refeicao.payment.credit" class="col text-danger">{{ command }}</div>
+			</div>
+			<h5 class="mb-0">Comandas vendidas no <b>Débito</b></h5>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.refeicao.payment.debit" class="col text-danger">{{ command }}</div>
+			</div>
+			<h5 class="mb-0">Comandas vendidas no <b>Dinheiro</b></h5>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.refeicao.payment.money" class="col text-danger">{{ command }}</div>
+			</div>
+			<h5 class="mb-0">Comandas vendidas no <b>Pix</b></h5>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.refeicao.payment.pix" class="col text-danger">{{ command }}</div>
+			</div>
+			<h5 class="mb-0">Comandas vendidas no <b>Benefício (Refeição / Alimentação)</b></h5>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.refeicao.payment.benefit" class="col text-danger">{{ command }}</div>
+			</div>
+
+			<hr>
+
+			<h4 class="mb-0">Comandas agrupadas por forma de pagamento do tipo: <b>MARMITA</b></h4>
+			<h5 class="mb-0">Comandas vendidas no <b>Crédito à vista</b></h5>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.marmita.payment.credit" class="col text-danger">{{ command }}</div>
+			</div>
+			<h5 class="mb-0">Comandas vendidas no <b>Débito</b></h5>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.marmita.payment.debit" class="col text-danger">{{ command }}</div>
+			</div>
+			<h5 class="mb-0">Comandas vendidas no <b>Dinheiro</b></h5>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.marmita.payment.money" class="col text-danger">{{ command }}</div>
+			</div>
+			<h5 class="mb-0">Comandas vendidas no <b>Pix</b></h5>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.marmita.payment.pix" class="col text-danger">{{ command }}</div>
+			</div>
+			<h5 class="mb-0">Comandas vendidas no <b>Benefício (Refeição / Alimentação)</b></h5>
+			<div class="row mb-4">
+				<div *ngFor="let command of commands.marmita.payment.benefit" class="col text-danger">{{ command }}</div>
+			</div>
+			<!-- </div> -->
+	<!-- </div> -->
+</main>
