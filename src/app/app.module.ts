@@ -8,11 +8,18 @@ import { CreateComponent } from './create/create.component';
 import { HomeComponent } from './home/home.component';
 import { MATERIAL_IMPORTS } from './material-imports';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ExpenseComponent } from './expense/expense.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateComponent,
+		ExpenseComponent,
     HomeComponent
   ],
   imports: [
@@ -21,7 +28,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BrowserAnimationsModule,
 		MATERIAL_IMPORTS,
 		FormsModule,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatNativeDateModule,
+		MatDatepickerModule,
+		ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

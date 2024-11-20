@@ -1,26 +1,10 @@
 <main class="container pt-5">
-	<h1 class="display-4">Cadastro de nova comanda</h1>
+	<h1 class="display-4">Cadastro de nova despesa</h1>
 	<p class="text-muted">Fique atento aos campos com (*) pois eles são de preenchimento obrigatório.</p>
+
 	<form [formGroup]="form" (submit)="submit()">
 
 		<section class="row">
-			<div class="col-12 col-md-6 col-lg-4">
-				<mat-form-field class="form-field w-100" appearance="outline">
-					<mat-label>Número da comanda</mat-label>
-					<input matInput formControlName="commandNumber" [value]="form.get('commandNumber').value" [maxlength]="4" />
-				</mat-form-field>
-			</div>
-
-			<div class="col-12 col-md-6 col-lg-4">
-				<mat-form-field class="form-field w-100" appearance="outline">
-					<mat-label>Tipo de comanda</mat-label>
-					<mat-select formControlName="type">
-						<mat-option value="refeicao">Comanda de refeição</mat-option>
-						<mat-option value="marmita">Comanda de marmita</mat-option>
-					</mat-select>
-				</mat-form-field>
-			</div>
-
 			<div class="col-12 col-md-6 col-lg-4">
 				<mat-form-field class="form-field w-100" appearance="outline">
 					<mat-label>Método de pagamento</mat-label>
@@ -29,7 +13,6 @@
 						<mat-option value="credito">Crédito</mat-option>
 						<mat-option value="pix">Pix</mat-option>
 						<mat-option value="dinheiro">Dinheiro</mat-option>
-						<mat-option value="beneficio">Benefício</mat-option>
 					</mat-select>
 				</mat-form-field>
 			</div>
@@ -41,10 +24,10 @@
 				</mat-form-field>
 			</div>
 
-			<div class="col-12 col-md-6">
-				<mat-form-field floatLabel="always" class="form-field w-100" appearance="outline">
-					<mat-label>Quantidade</mat-label>
-					<input matInput formControlName="quantity" type="number" class="example-right-align" placeholder="0">
+			<div class="col-12 col-md-6 col-lg-4">
+				<mat-form-field class="form-field w-100" appearance="outline">
+					<mat-label>Descrição</mat-label>
+					<input matInput formControlName="description" [value]="form.get('description').value" />
 				</mat-form-field>
 			</div>
 		</section>
@@ -54,7 +37,7 @@
 
 			<div class="d-flex flex-column flex-lg-row">
 				<button mat-raised-button color="primary" type="submit">Salvar e sair</button>
-				<button mat-raised-button color="primary" type="button" class="mt-2 mt-lg-0 ms-lg-2" (click)="createAndContinue()">Salvar e continuar</button>
+				<button mat-raised-button color="primary" type="button" class="mt-2 mt-lg-0 ms-lg-2" (click)="saveAndContinue()">Salvar e continuar</button>
 			</div>
 		</div>
 	</form>

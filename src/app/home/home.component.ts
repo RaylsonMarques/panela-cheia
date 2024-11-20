@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 
 @Component({
@@ -8,14 +9,9 @@ import { Router } from "@angular/router";
 })
 export class HomeComponent implements OnInit {
 	//- Tabelas
-	public displayedColumns: string[];
-	public dataSource: {
-		debit?: any[];
-		credit?: any[];
-		pix?: any[];
-		money?: any[];
-		benefit?: any[];
-	};
+	public form: FormGroup;
+	public referenceDateTitle: string;
+	public showActionBar: boolean;
 	//- Numero das comandas
 	public commands: {
 		marmita: {
@@ -23,159 +19,119 @@ export class HomeComponent implements OnInit {
 			last: number;
 			numbers: number[];
 			lostCommands: number[];
-			payment: {
-				debit?: number[];
-				credit?: number[];
-				pix?: number[];
-				money?: number[];
-				benefit?: number[];
-			};
+			payment: { debit?: number[]; credit?: number[]; pix?: number[]; money?: number[]; benefit?: number[]; };
 		};
 		refeicao: {
 			first: number;
 			last: number;
 			numbers: number[];
 			lostCommands: number[];
-			payment: {
-				debit?: number[];
-				credit?: number[];
-				pix?: number[];
-				money?: number[];
-				benefit?: number[];
-			};
+			payment: { debit?: number[]; credit?: number[]; pix?: number[]; money?: number[]; benefit?: number[]; };
 		};
 	};
+
 	//- Somatória de totais
 	public sumValue: {
-		marmita: {
-			debit: number;
-			credit: number;
-			pix: number;
-			money: number;
-			benefit: number;
-		};
-		refeicao: {
-			debit: number;
-			credit: number;
-			pix: number;
-			money: number;
-			benefit: number;
-		};
+		marmita: { debit: number; credit: number; pix: number; money: number; benefit: number; };
+		refeicao: { debit: number; credit: number; pix: number; money: number; benefit: number; };
+		expenses: { debit: number; credit: number; pix: number; money: number; };
 		generalTotal: number;
 		marmitaTotal: number;
 		refeicaoTotal: number;
+		expensesTotal: number;
 	};
 
-	constructor(private readonly router: Router) {}
+	constructor(private readonly router: Router, private readonly formBuilder: FormBuilder) {}
 
 	public ngOnInit(): void {
 		this.init();
 	}
 
-	public redirect(): void {
-		this.router.navigate(["/create"]);
+	public redirect(route: string): void {
+		this.router.navigate([route]);
 	}
 
 	public formatMoney(value: number): string {
-		return Intl.NumberFormat("pt-BR", {
-			style: "currency",
-			currency: "BRL",
-		}).format(value);
+		return Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
+	}
+
+	public resetResume(): void {
+		localStorage.clear();
+		this.initializeVariables();
+	}
+
+	public toggleActionBar(): void {
+		this.showActionBar = !this.showActionBar;
 	}
 
 	private init(): void {
 		this.initializeVariables();
+		this.createForm();
+		this.addListenerToDate();
 		this.getAllCommands();
+		this.getAllExpenses();
 	}
 
 	private initializeVariables(): void {
-		this.displayedColumns = [
-			"no_command",
-			"type",
-			"date",
-			"value",
-			"quantity",
-			"total",
-		];
-		this.dataSource = {};
+		this.referenceDateTitle = localStorage.getItem('referenceDate') || "";
+		this.showActionBar = true;
 		this.commands = {
-			marmita: {
-				first: 0,
-				last: 0,
-				numbers: [],
-				lostCommands: [],
-				payment: {
-					debit: [],
-					credit: [],
-					pix: [],
-					money: [],
-					benefit: [],
-				},
-			},
-			refeicao: {
-				first: 0,
-				last: 0,
-				numbers: [],
-				lostCommands: [],
-				payment: {
-					debit: [],
-					credit: [],
-					pix: [],
-					money: [],
-					benefit: [],
-				},
-			},
+			marmita: { first: 0, last: 0, numbers: [], lostCommands: [], payment: { debit: [], credit: [], pix: [], money: [], benefit: [] } },
+			refeicao: { first: 0, last: 0, numbers: [], lostCommands: [], payment: { debit: [], credit: [], pix: [], money: [], benefit: [] } },
 		};
 		//- Somatória de totais
 		this.sumValue = {
 			marmita: { debit: 0, credit: 0, pix: 0, money: 0, benefit: 0 },
 			refeicao: { debit: 0, credit: 0, pix: 0, money: 0, benefit: 0 },
+			expenses: { debit: 0, credit: 0, pix: 0, money: 0 },
 			generalTotal: 0,
 			marmitaTotal: 0,
 			refeicaoTotal: 0,
+			expensesTotal: 0
 		};
 	}
 
-	private getAllCommands(): void {
-		//- Reinicia os dados da tabela
-		this.dataSource = {
-			debit: [],
-			credit: [],
-			pix: [],
-			money: [],
-			benefit: [],
-		};
+	private createForm(): void {
+		this.form = this.formBuilder.group({
+			referenceDate: [null, null]
+		});
+	}
 
+	private addListenerToDate(): void {
+		this.form.get('referenceDate').valueChanges.subscribe((value: Date) => {
+			const referenceDateValue: Date = new Date(value);
+			const day: number = referenceDateValue.getDate();
+			const month: number = referenceDateValue.getMonth() + 1;
+			const year: number = referenceDateValue.getFullYear();
+
+			this.referenceDateTitle = ` do dia ${day}/${month}/${year}`;
+			localStorage.setItem('referenceDate', this.referenceDateTitle);
+		});
+	}
+
+	private getAllCommands(): void {
 		//- Busca as comandas e novas comandas salvas
 		let allCommandsSaved = [];
-		const commandsSaveInLocalStorage = JSON.parse(
-			localStorage.getItem("allCommands")
-		);
-		const newCommand = JSON.parse(localStorage.getItem("newCommand"));
-		localStorage.removeItem("newCommand");
+		const commandsSaveInLocalStorage = JSON.parse(localStorage.getItem("allCommands"));
+		const newCommands = JSON.parse(localStorage.getItem("newCommands"));
+		localStorage.removeItem("newCommands");
 
 		//- Verifica se há comandas salvas no armazenamento
 		if (commandsSaveInLocalStorage)
 			allCommandsSaved.push(...commandsSaveInLocalStorage);
 
 		//- Adiciona a nova comanda no array de todas as comandas
-		if (newCommand) allCommandsSaved.push(newCommand);
+		if (newCommands && newCommands.length > 0) allCommandsSaved.push(...newCommands);
 
 		//- Salva todas as comandas
 		localStorage.setItem("allCommands", JSON.stringify(allCommandsSaved));
 
 		//- Itera no array de comandas salvas, e preenche o datasource das tabelas
 		allCommandsSaved.forEach((command) => {
-			this.fillDataSourceByPayment(command);
 			//- Calcula os valores totais, e específicos de cada tipo
 			this.calculateValueByPayment(command);
 			//- Identifica os numeros das comandas
-			if (command.type === 'refeicao') {
-				this.commands.refeicao.numbers.push(command.number);
-			}
-			if (command.type === 'marmita') {
-				this.commands.marmita.numbers.push(command.number);
-			}
+			this.commands[command.type].numbers.push(command.number);
 		});
 
 		//- Busca o menor número do array
@@ -200,163 +156,142 @@ export class HomeComponent implements OnInit {
 			commandsRangeMarmita.splice(index, 1);
 		});
 		this.commands.marmita.lostCommands = commandsRangeMarmita;
-
-		//- Verifica o primeiro número da comanda
-		//- Verifica o último número da comanda
-		//- Cria um array com o range de comandas criadas. ex.: 1201 - 1359
-		//- Cria um array com os numeros de comandas cadastrados
-		//- Identifica os números faltantes no array
 	}
 
-	private fillDataSourceByPayment(command: any): any {
-		//- Formatação da data
-		const date: Date = new Date();
-		const day: number = date.getDate();
-		const month: number = date.getMonth() + 1;
-		const year: number = date.getFullYear();
+	private getAllExpenses(): void {
+		let allExpensesSaved = [];
+		const expensesSaveInLocalStorage = JSON.parse(localStorage.getItem("allExpenses"));
+		const newExpenses = JSON.parse(localStorage.getItem("newExpenses"));
+		localStorage.removeItem("newExpenses");
 
-		const factory = {
-			debito: (commandNumber: number, type: string, amount: number, quantity: number, total: number): any => {
-				this.dataSource.debit.push({
-					no_command: commandNumber,
-					type,
-					date: `${day}/${month}/${year}`,
-					value: amount,
-					quantity,
-					total,
-				});
+		//- Verifica se há comandas salvas no armazenamento
+		if (expensesSaveInLocalStorage)
+			allExpensesSaved.push(...expensesSaveInLocalStorage);
 
-				if (type === "marmita") this.commands.marmita.payment.debit.push(commandNumber);
-				if (type === "refeicao") this.commands.refeicao.payment.debit.push(commandNumber);
-			},
-			credito: (commandNumber: number, type: string, amount: number, quantity: number, total: number): any => {
-				this.dataSource.credit.push({
-					no_command: commandNumber,
-					type,
-					date: `${day}/${month}/${year}`,
-					value: amount,
-					quantity,
-					total,
-				});
+		//- Adiciona a nova comanda no array de todas as comandas
+		if (newExpenses && newExpenses.length > 0) allExpensesSaved.push(...newExpenses);
 
-				if (type === "marmita") this.commands.marmita.payment.credit.push(commandNumber);
-				if (type === "refeicao") this.commands.refeicao.payment.credit.push(commandNumber);
-			},
-			pix: (commandNumber: number, type: string, amount: number, quantity: number, total: number): any => {
-				this.dataSource.pix.push({
-					no_command: commandNumber,
-					type,
-					date: `${day}/${month}/${year}`,
-					value: amount,
-					quantity,
-					total,
-				});
+		//- Salva todas as despesas
+		localStorage.setItem("allExpenses", JSON.stringify(allExpensesSaved));
 
-				if (type === "marmita") this.commands.marmita.payment.pix.push(commandNumber);
-				if (type === "refeicao") this.commands.refeicao.payment.pix.push(commandNumber);
-			},
-			dinheiro: (commandNumber: number, type: string, amount: number, quantity: number, total: number): any => {
-				this.dataSource.money.push({
-					no_command: commandNumber,
-					type,
-					date: `${day}/${month}/${year}`,
-					value: amount,
-					quantity,
-					total,
-				});
-
-				if (type === "marmita") this.commands.marmita.payment.money.push(commandNumber);
-				if (type === "refeicao") this.commands.refeicao.payment.money.push(commandNumber);
-			},
-			beneficio: (commandNumber: number, type: string, amount: number, quantity: number, total: number): any => {
-				this.dataSource.benefit.push({
-					no_command: commandNumber,
-					type,
-					date: `${day}/${month}/${year}`,
-					value: amount,
-					quantity,
-					total,
-				});
-
-				if (type === "marmita") this.commands.marmita.payment.benefit.push(commandNumber);
-				if (type === "refeicao") this.commands.refeicao.payment.benefit.push(commandNumber);
-			},
-		};
-
-		return factory[command.payment](
-			command.number,
-			command.type,
-			command.amount,
-			command.quantity,
-			command.totalCommand
-		);
+		//- Itera no array de comandas salvas, e preenche o datasource das tabelas
+		allExpensesSaved.forEach((expense) => {
+			//- Calcula os valores totais, e específicos de cada tipo
+			this.calculateExpenseValueByPayment(expense);
+		});
 	}
 
 	private calculateValueByPayment(command: any): any {
 		const factory = {
-			debito: (type: string, total: number): any => {
+			debito: (type: string, total: number, commandNumber: number): any => {
 				if (type === "marmita") {
+					//- Adiciona o número da comanda no controle de comandas
+					this.commands.marmita.payment.debit.push(commandNumber);
+					//- Calcula os valores totais
 					this.sumValue.marmita.debit += total;
 					this.sumValue.marmitaTotal += total;
-					this.sumValue.generalTotal += total;
 				}
+
 				if (type === "refeicao") {
+					//- Adiciona o numero da comanda no controle de comandas
+					this.commands.refeicao.payment.debit.push(commandNumber);
+					//- Calcula os valores totais
 					this.sumValue.refeicao.debit += total;
 					this.sumValue.refeicaoTotal += total;
-					this.sumValue.generalTotal += total;
 				}
+
+				this.sumValue.generalTotal += total;
 			},
-			credito: (type: string, total: number): any => {
+			credito: (type: string, total: number, commandNumber: number): any => {
 				if (type === "marmita") {
+					this.commands.marmita.payment.credit.push(commandNumber);
 					this.sumValue.marmita.credit += total;
 					this.sumValue.marmitaTotal += total;
-					this.sumValue.generalTotal += total;
 				}
+
 				if (type === "refeicao") {
+					this.commands.refeicao.payment.credit.push(commandNumber);
 					this.sumValue.refeicao.credit += total;
 					this.sumValue.refeicaoTotal += total;
-					this.sumValue.generalTotal += total;
 				}
+
+				this.sumValue.generalTotal += total;
 			},
-			pix: (type: string, total: number): any => {
+			pix: (type: string, total: number, commandNumber: number): any => {
 				if (type === "marmita") {
+					this.commands.marmita.payment.pix.push(commandNumber);
 					this.sumValue.marmita.pix += total;
 					this.sumValue.marmitaTotal += total;
-					this.sumValue.generalTotal += total;
 				}
+
 				if (type === "refeicao") {
+					this.commands.refeicao.payment.pix.push(commandNumber);
 					this.sumValue.refeicao.pix += total;
 					this.sumValue.refeicaoTotal += total;
-					this.sumValue.generalTotal += total;
 				}
+
+				this.sumValue.generalTotal += total;
 			},
-			dinheiro: (type: string, total: number): any => {
+			dinheiro: (type: string, total: number, commandNumber: number): any => {
 				if (type === "marmita") {
+					this.commands.marmita.payment.money.push(commandNumber);
 					this.sumValue.marmita.money += total;
 					this.sumValue.marmitaTotal += total;
-					this.sumValue.generalTotal += total;
 				}
+
 				if (type === "refeicao") {
+					this.commands.refeicao.payment.money.push(commandNumber);
 					this.sumValue.refeicao.money += total;
 					this.sumValue.refeicaoTotal += total;
-					this.sumValue.generalTotal += total;
 				}
+
+				this.sumValue.generalTotal += total;
 			},
-			beneficio: (type: string, total: number): any => {
+			beneficio: (type: string, total: number, commandNumber: number): any => {
 				if (type === "marmita") {
+					this.commands.marmita.payment.benefit.push(commandNumber);
 					this.sumValue.marmita.benefit += total;
 					this.sumValue.marmitaTotal += total;
-					this.sumValue.generalTotal += total;
 				}
+
 				if (type === "refeicao") {
+					this.commands.refeicao.payment.benefit.push(commandNumber);
 					this.sumValue.refeicao.benefit += total;
 					this.sumValue.refeicaoTotal += total;
-					this.sumValue.generalTotal += total;
 				}
+
+				this.sumValue.generalTotal += total;
 			},
 		};
 
-		return factory[command.payment](command.type, command.totalCommand);
+		return factory[command.payment](command.type, command.totalCommand, command.number);
+	}
+
+	private calculateExpenseValueByPayment(expense: any): any {
+		const factory = {
+			debito: (total: number): any => {
+				this.sumValue.expenses.debit += total;
+				this.sumValue.expensesTotal += total;
+			},
+			credito: (total: number): any => {
+				this.sumValue.expenses.debit += total;
+				this.sumValue.expensesTotal += total;
+			},
+			pix: (total: number): any => {
+				this.sumValue.expenses.debit += total;
+				this.sumValue.expensesTotal += total;
+			},
+			dinheiro: (total: number): any => {
+				this.sumValue.expenses.debit += total;
+				this.sumValue.expensesTotal += total;
+			},
+			beneficio: (total: number): any => {
+				this.sumValue.expenses.debit += total;
+				this.sumValue.expensesTotal += total;
+			},
+		};
+
+		return factory[expense.payment](expense.amount);
 	}
 
 	private generateRange(commandNumberInitial: number, commandNumberFinal: number): number[] {
